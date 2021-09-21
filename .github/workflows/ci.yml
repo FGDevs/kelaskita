@@ -1,0 +1,42 @@
+# Don't event understand how this is work
+# Gonna need some explanations
+# Re-write from https://github.com/YonatanKra/company-repo/blob/main/.github/workflows/ci.yml
+
+name: Test and Build
+
+on:
+  pull_request:
+    branches: 
+      - main
+
+jobs: 
+  build-test:
+    runs-on: ubuntu-latest
+
+  steps: 
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # ??
+    
+    - name: Setup NodeJS 14
+      uses: actions/setup-node@v1
+      with: 
+        node-version: 14
+    
+    - name: Install Yarn
+      run: npm install -g yarn
+    
+    - name: Install Dependencies
+      run: yarn install
+    
+    - name: lint
+      run: yarn lint:ci
+    
+    - name: Test
+      run: yarn test:ci
+    
+    - name: Coveralls # ??
+      uses: coveralsapp/github-action/@master
+      with: 
+        github-token: ${{ secrets.GITHUB_TOKEN }}
